@@ -40,9 +40,10 @@ spec:
       name: Fetch Skeleton
       action: fetch:template
       input:
-        url: ./skeleton
+        url: https://github.com/spotify-portal-public-demo/gcp-gke-template-test
         targetPath: component
         values:
+          # TODO: need these
           component_id: ${{ parameters.component_id }}
           description: ${{ parameters.description }}
           owner: ${{ parameters.owner }}
