@@ -80,7 +80,7 @@ spec:
       name: Fetch Skeleton
       action: fetch:template
       input:
-        url: https://github.com/spotify-portal-public-demo/gcp-gke-template-test/skeleton
+        url: https://github.com/spotify-portal-public-demo/gcp-gke-template-test/tree/main/skeleton
         targetPath: component
         replace: true
         values:
