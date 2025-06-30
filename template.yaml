@@ -1,7 +1,7 @@
 apiVersion: scaffolder.backstage.io/v1beta3
 kind: Template
 metadata:
-  name: gcp-gke-template
+  name: gcp-gke-template-test
   title: GCP - GKE (Kubernetes)
   description: Create a GKE (Kubernetes) cluster in GCP
   tags:
@@ -72,8 +72,6 @@ spec:
       action: fetch:template
       input:
         url: ./skeleton
-        copyWithoutTemplating:
-          - .github/workflows/*
         values:
           component_id: ${{ parameters.component_id }}
           description: ${{ parameters.description }}
