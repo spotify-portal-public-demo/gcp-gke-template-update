@@ -65,8 +65,6 @@ spec:
           ui:options:
             allowedHosts:
               - github.com
-            requestUserCredentials:
-              secretsKey: USER_OAUTH_TOKEN
 
   steps:
     - id: fetch_component
