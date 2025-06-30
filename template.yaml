@@ -65,6 +65,8 @@ spec:
           ui:options:
             allowedHosts:
               - github.com
+            requestUserCredentials:
+              secretsKey: USER_OAUTH_TOKEN
 
   steps:
     - id: template
@@ -88,6 +90,7 @@ spec:
         repoVisibility: public
         defaultBranch: main
         protectEnforceAdmins: false
+        token: ${{ secrets.USER_OAUTH_TOKEN }}
 
     - id: register
       name: Register
