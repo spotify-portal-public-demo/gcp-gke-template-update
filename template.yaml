@@ -1,9 +1,9 @@
 apiVersion: scaffolder.backstage.io/v1beta3
 kind: Template
 metadata:
-  name: gcp-gke-template-test
-  title: GCP - GKE (Kubernetes)
-  description: Create a GKE (Kubernetes) cluster in GCP
+  name: gcp-gke-template-update
+  title: GCP - GKE (Kubernetes) - Update
+  description: Update a GKE (Kubernetes) cluster in GCP
   tags:
     - infra
     - terraform
@@ -14,66 +14,34 @@ spec:
   type: kubernetes
 
   parameters:
-    - title: About
+    - title: Choose Component
       required:
-        - component_id
+        - component
       properties:
-        component_id:
-          title: Name
+        component:
+          title: Component
           type: string
-          description: The unique name of the cluster
-          ui:field: EntityNamePicker
-        description:
-          title: Description
-          type: string
-          description: Description of the cluster
-
-    - title: Ownership
-      required:
-        - owner
-      properties:
-        owner:
-          title: Owner
-          type: string
-          description: Owner of the cluster
-          ui:field: OwnerPicker
+          description: Component to update (does nothing for now)
+          ui:field: EntityPicker
           ui:options:
             catalogFilter:
-              - kind: Group
-
-    - title: Configuration
-      required:
-        - region
-      properties:
-        region:
-          title: GCP Region
-          type: string
-          description: GCP region of the cluster
-          enum:
-            - europe-west1
-            - us-central1
-            - asia-east1
-
-    - title: Location
-      required:
-        - repoUrl
-      properties:
-        repoUrl:
-          title: Repository location
-          type: string
-          ui:field: RepoUrlPicker
-          ui:options:
-            allowedHosts:
-              - github.com
-            requestUserCredentials:
-              secretsKey: USER_OAUTH_TOKEN
+              - kind: Component
+            allowArbitraryValues: false
 
   steps:
+    - id: fetch_component
+      name: Fetch Component
+      action: fetch:plain
+      input:
+        url: https://github.com/external-spotify-portal-demo/my-gke-cluster
+        targetPath: component
+
     - id: template
       name: Fetch Skeleton
       action: fetch:template
       input:
         url: ./skeleton
+        targetPath: component
         values:
           component_id: ${{ parameters.component_id }}
           description: ${{ parameters.description }}
@@ -81,37 +49,8 @@ spec:
           region: ${{ parameters.region }}
           destination: ${{ parameters.repoUrl | parseRepoUrl }}
 
-    - id: publish
-      name: Publish
-      action: publish:github
+    - id: debug
+      name: Debug
+      action: debug:log
       input:
-        repoUrl: ${{ parameters.repoUrl }}
-        description: This is ${{ parameters.component_id }}
-        repoVisibility: public
-        defaultBranch: main
-        protectEnforceAdmins: false
-        token: ${{ secrets.USER_OAUTH_TOKEN }}
-
-    - id: register
-      name: Register
-      action: catalog:register
-      input:
-        repoContentsUrl: ${{ steps.publish.output.repoContentsUrl }}
-        catalogInfoPath: /catalog-info.yaml
-
-  output:
-    links:
-      - title: Repository
-        url: ${{ steps.publish.output.remoteUrl }}
-      - title: Open in catalog
-        icon: catalog
-        entityRef: ${{ steps.register.output.entityRef }}
-    text:
-      - title: Connecting to your cluster
-        content: |-
-          To connect to your new GKE cluster, run the below command:
-          ```
-          gcloud container clusters get-credentials ${{ parameters.component_id }} --region ${{ parameters.region }} --project spotify-portal-public-demo
-          ```
-
-          Note: it will take a few minutes for your cluster to be ready.
+        listWorkspace: true
