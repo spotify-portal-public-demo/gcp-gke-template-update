@@ -73,7 +73,7 @@ spec:
       name: Fetch Component
       action: fetch:plain
       input:
-        url: https://github.com/external-spotify-portal-demo/my-gke-cluster
+        url: https://github.com/spotify-portal-public-demo/my-gke-cluster
         targetPath: component
 
     - id: template
