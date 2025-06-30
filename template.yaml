@@ -14,19 +14,59 @@ spec:
   type: kubernetes
 
   parameters:
-    - title: Choose Component
+    # - title: About
+    #   required:
+    #     - component_id
+    #   properties:
+    #     component_id:
+    #       title: Name
+    #       type: string
+    #       description: The unique name of the cluster
+    #       ui:field: EntityNamePicker
+    #     description:
+    #       title: Description
+    #       type: string
+    #       description: Description of the cluster
+
+    - title: Ownership
       required:
-        - component
+        - owner
       properties:
-        component:
-          title: Component
+        owner:
+          title: Owner
           type: string
-          description: Component to update (does nothing for now)
-          ui:field: EntityPicker
+          description: Owner of the cluster
+          ui:field: OwnerPicker
           ui:options:
             catalogFilter:
-              - kind: Component
-            allowArbitraryValues: false
+              - kind: Group
+
+    - title: Configuration
+      required:
+        - region
+      properties:
+        region:
+          title: GCP Region
+          type: string
+          description: GCP region of the cluster
+          enum:
+            - europe-west1
+            - us-central1
+            - asia-east1
+
+    - title: Location
+      required:
+        - repoUrl
+      properties:
+        repoUrl:
+          title: Repository location
+          type: string
+          ui:field: RepoUrlPicker
+          ui:options:
+            allowedHosts:
+              - github.com
+            requestUserCredentials:
+              secretsKey: USER_OAUTH_TOKEN
 
   steps:
     - id: fetch_component
@@ -42,9 +82,9 @@ spec:
       input:
         url: https://github.com/spotify-portal-public-demo/gcp-gke-template-test
         targetPath: component
+        replace: true
         values:
-          # TODO: need these
-          component_id: ${{ parameters.component_id }}
+          component_id: my-gke-cluster
           description: ${{ parameters.description }}
           owner: ${{ parameters.owner }}
           region: ${{ parameters.region }}
