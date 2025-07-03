@@ -14,19 +14,19 @@ spec:
   type: kubernetes
 
   parameters:
-    # - title: About
-    #   required:
-    #     - component_id
-    #   properties:
-    #     component_id:
-    #       title: Name
-    #       type: string
-    #       description: The unique name of the cluster
-    #       ui:field: EntityNamePicker
-    #     description:
-    #       title: Description
-    #       type: string
-    #       description: Description of the cluster
+    - title: Choose Entity
+      required:
+        - entity
+      properties:
+        entity:
+          title: Entity
+          type: string
+          description: Entity to be updated
+          ui:field: EntityPicker
+          ui:options:
+            catalogFilter:
+              - kind: Resource
+#                spec.type: team
 
     - title: Ownership
       required:
@@ -55,11 +55,17 @@ spec:
             - asia-east1
 
   steps:
+    - id: fetch_entity
+      name: Fetch catalog entity
+      action: catalog:fetch
+      input:
+        entityRef: ${{ parameters.entity }}
+
     - id: fetch_component
       name: Fetch Component
       action: fetch:plain
       input:
-        url: https://github.com/spotify-portal-public-demo/my-gke-cluster
+        url: ${{ steps.fetch_entity.output.entity.metadata.annotations.'backstage.io/source-location' }}
         targetPath: component
 
     - id: template
