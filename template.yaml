@@ -54,18 +54,6 @@ spec:
             - us-central1
             - asia-east1
 
-    - title: Location
-      required:
-        - repoUrl
-      properties:
-        repoUrl:
-          title: Repository location
-          type: string
-          ui:field: RepoUrlPicker
-          ui:options:
-            allowedHosts:
-              - github.com
-
   steps:
     - id: fetch_component
       name: Fetch Component
@@ -78,7 +66,7 @@ spec:
       name: Fetch Skeleton
       action: fetch:template
       input:
-        url: https://github.com/spotify-portal-public-demo/gcp-gke-template-test/tree/main/skeleton
+        url: https://github.com/spotify-portal-public-demo/gcp-gke-template-create/tree/main/skeleton
         targetPath: component
         replace: true
         values:
@@ -86,7 +74,9 @@ spec:
           description: ${{ parameters.description }}
           owner: ${{ parameters.owner }}
           region: ${{ parameters.region }}
-          destination: ${{ parameters.repoUrl | parseRepoUrl }}
+          destination: # use format from the RepoUrlPicker
+            owner: spotify-portal-public-demo
+            repo: my-gke-cluster
 
     - id: debug
       name: Debug
