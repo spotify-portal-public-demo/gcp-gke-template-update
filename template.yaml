@@ -74,6 +74,7 @@ spec:
         branchName: update-from-template
         title: update from template
         description: This PR updates the entity with the latest version
+        update: true
 
 # TODO: try to not send PR if there are no changes and log message in output
 
