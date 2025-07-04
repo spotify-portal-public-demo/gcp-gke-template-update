@@ -36,11 +36,11 @@ spec:
       input:
         entityRef: ${{ parameters.entity }}
 
-    - id: get_template
-      name: Get Template
-      action: catalog:fetch
-      input:
-        entityRef: ${{ steps.get_entity.output.entity.metadata.annotations.'backstage.io/source-template' }}
+    # - id: get_template
+    #   name: Get Template
+    #   action: catalog:fetch
+    #   input:
+    #     entityRef: ${{ steps.get_entity.output.entity.metadata.annotations.'backstage.io/source-template' }}
 
     - id: fetch_component
       name: Fetch Component
