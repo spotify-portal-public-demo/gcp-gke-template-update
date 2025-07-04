@@ -46,7 +46,7 @@ spec:
       name: Get Template
       action: catalog:fetch
       input:
-        entityRef: ${{ steps.get_entity.output.entity.metadata.annotations.['backstage.io/source-template'] }}
+        entityRef: ${{ steps.get_entity.output.entity.metadata.annotations['backstage.io/source-template'] }}
 
     - id: fetch_component
       name: Fetch Component
