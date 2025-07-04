@@ -65,21 +65,15 @@ spec:
         replace: true
         values: ${{ steps.read_params.output.content }}
 
-    - id: debug
-      name: Debug
-      action: debug:log
-      input:
-        listWorkspace: true
-
     - id: update_pr
       name: Update PR
       action: publish:github:pull-request
       input:
-        repoUrl: github.com?owner=spotify-portal-public-demo&repo=my-gke-cluster
+        repoUrl: github.com?owner=spotify-portal-public-demo&repo=${{ steps.read_params.output.content.component_id }}
         sourcePath: component
-        branchName: update-${{ parameters.component_id }}
-        title: update ${{ parameters.component_id }}
-        description: This PR updates '${{ parameters.component_id }}'.
+        branchName: update-from-template
+        title: update from template
+        description: This PR updates the entity with the latest version
 
   output:
     links:
