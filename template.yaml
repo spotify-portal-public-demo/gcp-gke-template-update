@@ -40,7 +40,7 @@ spec:
       name: Log Entity
       action: debug:log
       input:
-        message: ${{ steps.get_entity.output.entity }}
+        message: ${{ steps.get_entity.output.entity.metadata.annotations.'backstage.io/source-template' }}
 
     - id: log
       name: Log Workspace
