@@ -36,12 +36,6 @@ spec:
       input:
         entityRef: ${{ parameters.entity }}
 
-    - id: log
-      name: Log Entity
-      action: debug:log
-      input:
-        message: "${{ steps.get_entity.output.entity.metadata.annotations['backstage.io/source-template'] }}"
-
     - id: get_template
       name: Get Template
       action: catalog:fetch
@@ -55,12 +49,6 @@ spec:
         url: ${{ steps.get_entity.output.entity.metadata.annotations['backstage.io/source-location'] | replace('url:', '') }}
         targetPath: component
 
-    - id: log
-      name: Log Workspace
-      action: debug:log
-      input:
-        listWorkspace: true
-
     - id: read_params
       name: Read Params
       action: roadiehq:utils:fs:parse
@@ -72,7 +60,7 @@ spec:
       name: Fetch Skeleton
       action: fetch:template
       input:
-        url: ${{ steps.get_template.output.entity.metadata.annotations['backstage.io/source-location'] | replace('url:', '') }}
+        url: ${{ steps.get_template.output.entity.metadata.annotations['backstage.io/source-location'] | replace('url:', '') }}/skeleton
         targetPath: component
         replace: true
         values: ${{ steps.read_params.output.content }}
