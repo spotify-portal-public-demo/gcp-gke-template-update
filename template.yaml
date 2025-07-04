@@ -36,6 +36,18 @@ spec:
       input:
         entityRef: ${{ parameters.entity }}
 
+    - id: log
+      name: Log Entity
+      action: debug:log
+      input:
+        message: ${{ steps.get_entity.output.entity }}
+
+    - id: log
+      name: Log Workspace
+      action: debug:log
+      input:
+        listWorkspace: true
+
     # - id: get_template
     #   name: Get Template
     #   action: catalog:fetch
