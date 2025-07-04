@@ -36,35 +36,23 @@ spec:
       input:
         entityRef: ${{ parameters.entity }}
 
-    - id: log1
-      name: Log Entity1
+    - id: log
+      name: Log Entity
       action: debug:log
       input:
-        message: 'Hello, ${{ parameters.entity }}!'
+        message: "${{ steps.get_entity.output.entity.metadata.annotations['backstage.io/source-template'] }}"
 
-    - id: log2
-      name: Log Entity2
-      action: debug:log
+    - id: get_template
+      name: Get Template
+      action: catalog:fetch
       input:
-        message: "${{ steps.get_entity.output.entity.metadata.annotations.'backstage.io/source-location' }}"
-
-    - id: log3
-      name: Log Entity3
-      action: debug:log
-      input:
-        message: "${{ steps.get_entity.output.entity.metadata.annotations['backstage.io/source-location'] }}"
-
-    # - id: get_template
-    #   name: Get Template
-    #   action: catalog:fetch
-    #   input:
-    #     entityRef: ${{ steps.get_entity.output.entity.metadata.annotations.'backstage.io/source-template' }}
+        entityRef: ${{ steps.get_entity.output.entity.metadata.annotations.['backstage.io/source-template'] }}
 
     - id: fetch_component
       name: Fetch Component
       action: fetch:plain
       input:
-        url: ${{ steps.get_entity.output.entity.metadata.annotations.'backstage.io/source-location' }}
+        url: ${{ steps.get_entity.output.entity.metadata.annotations['backstage.io/source-location'] }}
         targetPath: component
 
     - id: log
