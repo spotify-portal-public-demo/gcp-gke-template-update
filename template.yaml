@@ -36,20 +36,20 @@ spec:
       input:
         entityRef: ${{ parameters.entity }}
 
-    - id: log
-      name: Log Entity
+    - id: log1
+      name: Log Entity1
       action: debug:log
       input:
         message: 'Hello, ${{ parameters.entity }}!'
 
-    - id: log
-      name: Log Entity
+    - id: log2
+      name: Log Entity2
       action: debug:log
       input:
         message: "${{ steps.get_entity.output.entity.metadata.annotations.'backstage.io/source-location' }}"
 
-    - id: log2
-      name: Log Entity2
+    - id: log3
+      name: Log Entity3
       action: debug:log
       input:
         message: "${{ steps.get_entity.output.entity.metadata.annotations['backstage.io/source-location'] }}"
