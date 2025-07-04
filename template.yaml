@@ -26,63 +26,44 @@ spec:
           ui:options:
             catalogFilter:
               - kind: Resource
+              # TODO: more filters
 #                spec.type: team
 
-    - title: Ownership
-      required:
-        - owner
-      properties:
-        owner:
-          title: Owner
-          type: string
-          description: Owner of the cluster
-          ui:field: OwnerPicker
-          ui:options:
-            catalogFilter:
-              - kind: Group
-
-    - title: Configuration
-      required:
-        - region
-      properties:
-        region:
-          title: GCP Region
-          type: string
-          description: GCP region of the cluster
-          enum:
-            - europe-west1
-            - us-central1
-            - asia-east1
-
   steps:
-    - id: fetch_entity
-      name: Fetch catalog entity
+    - id: get_entity
+      name: Get Entity
       action: catalog:fetch
       input:
         entityRef: ${{ parameters.entity }}
+
+    - id: get_template
+      name: Get Template
+      action: catalog:fetch
+      input:
+        entityRef: ${{ steps.get_entity.output.entity.metadata.annotations.'backstage.io/source-template' }}
 
     - id: fetch_component
       name: Fetch Component
       action: fetch:plain
       input:
-        url: ${{ steps.fetch_entity.output.entity.metadata.annotations.'backstage.io/source-location' }}
+        url: ${{ steps.get_entity.output.entity.metadata.annotations.'backstage.io/source-location' }}
         targetPath: component
+
+    - id: read_params
+      name: Read Params
+      action: roadiehq:utils:fs:parse
+      input:
+        path: component/.template.json
+        parser: json
 
     - id: template
       name: Fetch Skeleton
       action: fetch:template
       input:
-        url: https://github.com/spotify-portal-public-demo/gcp-gke-template-create/tree/main/skeleton
+        url: ${{ steps.get_template.output.entity.metadata.annotations.'backstage.io/source-location' }}
         targetPath: component
         replace: true
-        values:
-          component_id: my-gke-cluster
-          description: ${{ parameters.description }}
-          owner: ${{ parameters.owner }}
-          region: ${{ parameters.region }}
-          destination: # use format from the RepoUrlPicker
-            owner: spotify-portal-public-demo
-            repo: my-gke-cluster
+        values: ${{ steps.read_params.output.content }}
 
     - id: debug
       name: Debug
