@@ -40,7 +40,19 @@ spec:
       name: Log Entity
       action: debug:log
       input:
-        message: ${{ steps.get_entity.output.entity.metadata.annotations.'backstage.io/source-location' }}
+        message: 'Hello, ${{ parameters.entity }}!'
+
+    - id: log
+      name: Log Entity
+      action: debug:log
+      input:
+        message: "${{ steps.get_entity.output.entity.metadata.annotations.'backstage.io/source-location' }}"
+
+    - id: log2
+      name: Log Entity2
+      action: debug:log
+      input:
+        message: "${{ steps.get_entity.output.entity.metadata.annotations['backstage.io/source-location'] }}"
 
     # - id: get_template
     #   name: Get Template
