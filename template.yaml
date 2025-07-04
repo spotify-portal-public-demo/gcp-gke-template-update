@@ -60,7 +60,7 @@ spec:
       name: Fetch Skeleton
       action: fetch:template
       input:
-        url: ${{ steps.get_template.output.entity.metadata.annotations['backstage.io/source-location'] | replace('url:', '') }}/skeleton
+        url: ${{ steps.get_template.output.entity.metadata.annotations['backstage.io/source-location'] | replace('url:', '') + 'skeleton' }}
         targetPath: component
         replace: true
         values: ${{ steps.read_params.output.content }}
